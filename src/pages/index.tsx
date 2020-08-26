@@ -1,65 +1,77 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import * as React from "react";
+import { observer } from "mobx-react";
+import { observable } from "mobx";
+import Router from 'next/router';
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+import styled from 'styled-components'
+import { Button } from 'antd';
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+import { Branch } from "models/branch";
+import { PartialMenu } from "models/menu";
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+interface IHomePageProps {
+  branch: Branch
 }
+
+@observer
+class HomePage extends React.Component<IHomePageProps> {
+
+  @observable menu: PartialMenu
+
+  constructor(props: IHomePageProps) {
+    super(props)
+    this.menu = new PartialMenu()
+  }
+
+  login() {
+    Router.push('/login')
+  }
+
+  render() {
+    return (
+      <Container>
+        {/* <MainHeader index={"1"}/>
+        <ContentContainer>
+          <Empty style={{marginTop: 100, marginRight: 0, marginLeft: 0, justifyContent: 'center', alignItems: 'center' }} description="Menünüz şuan boş gözüküyor. Kategori ve ürünlerinizi eklemek için Kategoriler sayfasından başlayabilirsiniz."/>
+        </ ContentContainer> */}
+        <Button onClick={this.login} type="primary">Login</Button>
+      </Container>
+    )
+  }
+}
+
+
+const Container = styled.div`
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const ContentContainer = styled.div`
+  /* background: red; */
+  height: 100%;
+  width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+`
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   // ...
+//   const branch: PartialBranch = {
+//     id: 3,
+//     name: "Timboo Cafe",
+//     address: "Arcadium Çayyolu/Ankara",
+//     telephone: "0312 234 23 41"
+//   }
+
+//   return {
+//     props: {
+//       branch
+//     }
+//   }
+// }
+
+export default HomePage
+
