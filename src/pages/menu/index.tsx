@@ -18,6 +18,7 @@ import UserService from "services/user";
 import { User } from "models/user";
 import { Menu } from "models/menu";
 import { Branch } from "models/branch";
+import { Cookies } from "react-cookie";
 
 
 interface IMenuPageProps {
@@ -29,26 +30,23 @@ interface IMenuPageProps {
 @observer
 class MenuPage extends React.Component<IMenuPageProps> {
 
-
   addCategory() {
     Router.push('/category/new')
   }
 
-
   render() {
     // const menu = this.props.user.branches?.find((branch, index) => { index === 0 })
    console.log(this.props.menu)
-
     return (
       <Container>
-        <MainHeader user={this.props.user} index={"1"}/>
+        <MainHeader user={this.props.user} index={"1"} />
         <ContentContainer>
           {this.props.menu.categories?.length === 0
           ?
             <AddCategoryButtonContainer>
               <Empty 
-                style={{marginTop: 0, marginRight: 0, marginLeft: 0, justifyContent: 'center', alignItems: 'center' }}
-                description="Menünüz şuan boş gözüküyor"
+                style={{marginTop: 0, marginRight: 0, marginLeft: 0, justifyContent: 'center', alignItems: 'center'}}
+                description="Menünüz şu an boş gözüküyor"
               />
               <Button 
                 icon={<PlusOutlined />} 
@@ -96,14 +94,17 @@ const AddCategoryButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: white;
+  padding: 50px;
+  box-sizing: border-box;
 `
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // ...
 
-  const { userId } = cookies(context)
+  const { userId, selectedBranchIndex } = cookies(context)
   const user: User = await UserService.fetchUser(userId!)
-  const branch = user.branches![0]
+  const branch = user.branches![parseInt(selectedBranchIndex!)]
   const menu = branch.menu!
 
   console.log(user, branch, menu)

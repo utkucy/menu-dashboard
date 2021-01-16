@@ -3,28 +3,25 @@ import { observer } from "mobx-react";
 import { GetServerSideProps } from 'next'
 import cookies from "next-cookies";
 import styled from 'styled-components'
-import {
-  QrcodeOutlined
-} from '@ant-design/icons';
+import { Layout } from 'antd';
 
-import MainHeader from '../../layouts/main-header/index'
 
+import MainHeader from 'layouts/main-header/index'
+import UserSettings from 'components/pages/profile/index'
 import UserService from "services/user";
 import { User } from "models/user";
 
-interface IQRPageProps {
+interface IProfilePageProps {
   user: User
 }
 
 @observer
-class QRPage extends React.Component<IQRPageProps> {
+class ProfilePage extends React.Component<IProfilePageProps> {
   render() {
     return (
       <Container>
         <MainHeader user={this.props.user} index={"2"} />
-        <ContentContainer>
-          <QrcodeOutlined  style={{ fontSize: 80, marginLeft: 10, color:'#000' }} />
-        </ ContentContainer>
+        <UserSettings user={this.props.user}/>
       </Container>
     )
   }
@@ -32,10 +29,11 @@ class QRPage extends React.Component<IQRPageProps> {
 
 
 const Container = styled.div`
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #F7FAFD;
 `
 
 const ContentContainer = styled.div`
@@ -69,5 +67,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 
 
-export default QRPage
+export default ProfilePage
 

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { observer } from "mobx-react";
 import { action, observable, computed } from "mobx";
 import { Drawer, Form, Button, Col, Row, Input, Divider, Typography, message } from 'antd';
+import { blue, magenta, grey } from '@ant-design/colors';
+ 
 import { PlusOutlined } from '@ant-design/icons';
 import { PartialProduct, Product } from "models/product";
 import ProductService from "services/product";
@@ -132,7 +134,7 @@ class NewProductModal extends React.Component<INewProductModal> {
       >
         <Row style={{ marginBottom: 15, marginTop: 15 }} gutter={16}>
           <Col span={24}>
-            <Title level={4}>{this.props.category.name}</Title>
+            <Title style={{ color: blue[5] }} level={4}>{this.props.category.name}</Title>
           </Col>
         </Row>
         <Form layout="vertical">

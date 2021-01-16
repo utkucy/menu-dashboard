@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Cookies } from "react-cookie";
 import styled from 'styled-components'
 import { observer } from "mobx-react";
 import { observable, action, computed } from "mobx";
@@ -6,7 +7,8 @@ import Router from 'next/router';
 import {  Menu, Avatar, Divider, Typography, Dropdown, message, Button } from 'antd';
 import {
   CaretDownOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  ShopTwoTone
 } from '@ant-design/icons';
 
 
@@ -30,11 +32,8 @@ class MainHeader extends React.Component<ILayout> {
     if (e.key === "1") {
       Router.push('/menu')
     }
-    // else if(e.key === "2") {
-    //   Router.push('/category')
-    // }
     else if(e.key === "2") {
-      Router.push('/qr-code');
+      Router.push('/profile');
     }
   }
 
@@ -43,20 +42,36 @@ class MainHeader extends React.Component<ILayout> {
     this.collapsed = !this.collapsed
   }
 
+  @action.bound
   async onSettingsClick(item: any) {
-    message.info(`Click on item ${item.key}`);
-    await UserService.logout()
+    if (item.key === "99")
+      await UserService.logout()
+    const cookies = new Cookies()
+    cookies.set("selectedBranchIndex", item.key)
+    location.reload()
   }
 
   @computed
   get menuList() {
+    const cookies = new Cookies()
+    const key = cookies.get("selectedBranchIndex")
     return (
-      <Menu onClick={this.onSettingsClick}>
-        <Menu.Item key="1">1st menu item</Menu.Item>
-        <Menu.Item key="2">2nd memu item</Menu.Item>
-        <Menu.Item key="3">3rd menu item</Menu.Item>
+      <Menu 
+      onClick={this.onSettingsClick}
+      style={{ padding: 0 }}
+      defaultSelectedKeys={[key]}
+      >
+        {this.props.user.branches?.map((branch, index) => (
+          <Menu.Item 
+          key={index} 
+          icon={<ShopTwoTone style={{ fontSize: 20 }} />} 
+          style={{ height: 50, display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}
+          >
+            {branch.name}
+          </Menu.Item>
+        ))}
         <Divider style={{ marginBottom: 0, marginTop: 0 }} />
-        <Menu.Item key="4">
+        <Menu.Item key="99">
           <Button type="link" icon={<LogoutOutlined />} >
             Çıkış Yap
           </Button>
@@ -69,19 +84,31 @@ class MainHeader extends React.Component<ILayout> {
     return (
       <StyledHeader >
         <ContentContainer>
-          <Menu onClick={this.menuClick} style={{ display: 'flex', height: '100%', borderBottomWidth: 0, alignItems: 'center', justifyContent: 'center' }} theme="light" mode="horizontal" defaultSelectedKeys={[this.props.index]}>   
-            <Menu.Item style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} key="1">Menü</Menu.Item>
-            {/* <Menu.Item style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} key="2">Yemek Kategorileri</Menu.Item> */}
-            <Menu.Item style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} key="2">QR Kod</Menu.Item>
+          <Menu 
+          onClick={this.menuClick} 
+          style={{ 
+            display: 'flex', 
+            height: '100%', 
+            borderBottomWidth: 0, 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+            }} 
+            theme="light" 
+            mode="horizontal" 
+            defaultSelectedKeys={[this.props.index]}
+            >   
+              <Menu.Item style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} key="1">Menü</Menu.Item>
+              {/* <Menu.Item style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} key="2">Yemek Kategorileri</Menu.Item> */}
+              <Menu.Item style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} key="2">Profil</Menu.Item>
           </Menu>
           <Divider style={{ borderColor: '#ddd', height: 40, top: 0, marginRight: 20 }} type="vertical" />
           <StyledLogo>
-            <TextContainer>
+            {/* <TextContainer>
               <LogoText>{this.props.user.restaurant_name}</LogoText>
-            </TextContainer> 
+            </TextContainer>  */}
             <StyledDropDown overlay={this.menuList}>
               <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                <Avatar size={80} src="https:d3heiv85u05n2u.cloudfront.net/images/brands/639_original.jpg?1392126163" />
+                <Avatar size={80} src={this.props.user.image_url} />
                 <CaretDownOutlined style={{ textAlign: 'center', fontSize: 20, marginLeft: 10, color:'#000' }}/>
               </a>
             </StyledDropDown>

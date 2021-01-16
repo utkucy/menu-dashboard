@@ -100,9 +100,9 @@ const FormContainer = styled.div`
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // ...
 
-  const { userId } = cookies(context)
+  const { userId, selectedBranchIndex } = cookies(context)
   const user: User = await UserService.fetchUser(userId!)
-  const branch = user.branches![0]
+  const branch = user.branches![parseInt(selectedBranchIndex!)]
   const menu = branch.menu!
   console.log(menu)
   // console.log(branch);

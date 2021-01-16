@@ -11,6 +11,7 @@ export class BaseUser {
   phone_number?: string
   website?: string
   trial?: boolean
+  image_url?: string
   branches?: BaseBranch[] | null
 
 }
@@ -28,6 +29,7 @@ export class User extends BaseUser {
     this.phone_number = data.phone_number
     this.website = data.website
     this.trial = data.trial
+    this.image_url = data.image_url
     this.branches = data.branches?.map((p) => new Branch(p))
   }
 
@@ -58,6 +60,7 @@ export class PartialUser extends User {
   @observable phone_number?: string
   @observable website?: string
   @observable trial?: boolean
+  @observable image_url?: string
   @observable branches?: PartialBranch[] | null
 
  

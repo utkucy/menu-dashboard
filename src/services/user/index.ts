@@ -18,6 +18,7 @@ export default class UserService {
       
       const cookies = new Cookies()
       cookies.set("userId", res.data.id)
+      cookies.set("selectedBranchIndex", 0)
       // cookies.set("selectedBranchId", res.data.branches[0].id)
       // cookies.set("selectedMenuId", res.data.branches[0].menu.id)
       console.log(cookies)
@@ -34,10 +35,7 @@ export default class UserService {
     cookies.remove("userId")
     Router.replace('/')
   }
-
-
-
-
+  
   static async fetchUser(userId: string) {
     try {
       const res = await axios.get(`http://localhost:5000/api/login/${userId}`)
@@ -48,6 +46,15 @@ export default class UserService {
       // })
       // console.log(user);
       return JSON.parse(JSON.stringify(user))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static async editUser(user: User) {
+    try {
+      const res = await axios.patch(`http://localhost:5000/api/user/${user.id}`, user)
+      console.log(res.data)
     } catch (error) {
       console.log(error)
     }
