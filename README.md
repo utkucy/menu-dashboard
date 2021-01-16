@@ -1,3 +1,11 @@
+# Menu
+
+*** Menu aims to reduce physical contact while ordering food in restaurants. So it provides a web application for the restaurants to create their account. Multiple branches can be added if needed. Each branch can have one menu. Menu consists of different pages like in the real life so pages can be modified or deleted later.
+
+# Frontend
+
+This repository is the frontend project for the web app. It's created with React, TypeScript, MobX, AntDesign and Next.JS.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
